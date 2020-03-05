@@ -41,7 +41,10 @@ export const List = styled.FlatList.attrs({
 
 export const User = styled.View`
   align-items: center;
-  margin: 0 20px 30px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #ede6d3;
 `;
 
 export const Avatar = styled.Image`
@@ -72,7 +75,7 @@ export const Bio = styled.Text.attrs({
 export const ProfileButton = styled(RectButton)`
   margin-top: 10px;
   align-self: stretch;
-  border-radius: 4px;
+  border-radius: 8px;
   background: #6ba8a9;
   justify-content: center;
   align-items: center;

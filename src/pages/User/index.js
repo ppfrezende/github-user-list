@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import api from '../../services/api';
 
 import {
@@ -8,13 +9,13 @@ import {
   Avatar,
   Name,
   Bio,
+  Loading,
   Stars,
   Starred,
   OwnerAvatar,
   Info,
   Title,
   Author,
-  Loading,
 } from './styles';
 
 export default class User extends Component {
@@ -43,7 +44,6 @@ export default class User extends Component {
   load = async (page = 1) => {
     const { stars } = this.state;
     const { navigation } = this.props;
-
     const user = navigation.getParam('user');
 
     const response = await api.get(`/users/${user.login}/starred`, {
@@ -60,6 +60,7 @@ export default class User extends Component {
 
   loadMore = () => {
     const { page } = this.state;
+
     const nextPage = page + 1;
 
     this.load(nextPage);
@@ -88,6 +89,7 @@ export default class User extends Component {
           <Name>{user.name}</Name>
           <Bio>{user.bio}</Bio>
         </Header>
+
         {loading ? (
           <Loading />
         ) : (
@@ -99,7 +101,7 @@ export default class User extends Component {
             onEndReached={this.loadMore}
             keyExtractor={star => String(star.id)}
             renderItem={({ item }) => (
-              <Starred>
+              <Starred onPress={() => this.handleNavigate(item)}>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
                 <Info>
                   <Title>{item.name}</Title>
@@ -112,4 +114,5 @@ export default class User extends Component {
       </Container>
     );
   }
+  //
 }

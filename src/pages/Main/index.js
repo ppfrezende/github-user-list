@@ -27,6 +27,7 @@ export default class Main extends Component {
   };
 
   state = {
+    error: null,
     newUser: '',
     users: [],
     loading: false,
@@ -53,20 +54,37 @@ export default class Main extends Component {
 
     this.setState({ loading: true });
 
-    const response = await api.get(`/users/${newUser}`);
+    try {
+      const response = await api.get(`/users/${newUser}`);
 
-    const data = {
-      name: response.data.name,
-      login: response.data.login,
-      bio: response.data.bio,
-      avatar: response.data.avatar_url,
-    };
+      const userExist = users.find(user => user.login === newUser);
 
-    this.setState({
-      users: [...users, data],
-      newUser: '',
-      loading: false,
-    });
+      if (userExist) {
+        throw new Error('User already exits on list');
+      }
+
+      const data = {
+        name: response.data.name,
+        login: response.data.login,
+        bio: response.data.bio,
+        avatar: response.data.avatar_url,
+      };
+
+      this.setState({
+        users: [...users, data],
+        newUser: '',
+        loading: false,
+      });
+    } catch (err) {
+      this.setState({
+        // eslint-disable-next-line react/no-unused-state
+        error: err.message.include('status code 404')
+          ? 'User not exist!'
+          : err.message,
+        newUser: '',
+        loading: false,
+      });
+    }
 
     Keyboard.dismiss();
   };
@@ -82,7 +100,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { users, newUser, loading } = this.state;
+    const { users, newUser, loading, error } = this.state;
 
     return (
       <Container>
@@ -90,9 +108,10 @@ export default class Main extends Component {
           <Input
             autoCorrect={false}
             autoCapitalize="none"
+            error={error}
             placeholder="Adicionar usuário"
             value={newUser}
-            onChangeText={text => this.setState({ newUser: text })}
+            onChangeText={text => this.setState({ newUser: text, error: null })}
             returnKeyType="send"
             onSubmitEditing={this.handleAddUser}
           />

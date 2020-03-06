@@ -28,3 +28,5 @@ Ao clicar no botão, se tem acesso aos 'stars' que cada perfil tem em sua conta.
 
 ### :mortar_board:
 O projeto faz parte de um módulo do bootcamp ministrado pela RocketSeat.
+
+![video](https://github.com/ppfrezende/github-user-list/blob/master/src/assets/gituserapp.gif?raw=true)
